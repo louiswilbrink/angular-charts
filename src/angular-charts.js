@@ -79,6 +79,8 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
         htmlEnabled: false
       },
       colors: [],
+      stroke: 'none',
+      strokeWidth: '0px',
       innerRadius: 0, // Only on pie Charts
       lineLegend: 'lineEnd', // Only on line Charts
       lineCurveType: 'cardinal',
@@ -177,14 +179,19 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
           [].push.apply(arr, scope.acConfig.colors);
         }
 
-        ;
         [].push.apply(arr, defaultColors);
 
         angular.extend(config, scope.acConfig);
         config.colors = arr;
-
+      }
+      
+      if (scope.acConfig.stroke) {
+        config.stroke = scope.acConfig.stroke;
       }
 
+      if (scope.acConfig.strokeWidth) {
+        config.strokeWidth = scope.acConfig.strokeWidth;
+      }
     }
 
     /**
@@ -809,6 +816,8 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
         .style("fill", function(d, i) {
           return getColor(i);
         })
+        .style("stroke", config.stroke)
+        .style("stroke-width", config.strokeWidth)
         .transition()
         .ease("linear")
         .duration(config.isAnimate ? 500 : 0)
@@ -838,8 +847,8 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
                   .select('path')
                   .transition()
                   .duration(200)
-                  .style("stroke", "")
-                  .style("stroke-width", "");
+                  .style("stroke", config.stroke)
+                  .style("stroke-width", config.strokeWidth);
                 removeToolTip();
                 config.mouseout(d, d3.event);
                 scope.$apply();
@@ -851,7 +860,6 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
                 config.click(d, d3.event);
                 scope.$apply();
               });
-
           }
         });
 
