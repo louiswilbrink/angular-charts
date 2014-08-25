@@ -837,8 +837,11 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
                 .select('path')
                 .transition()
                 .duration(200)
-                .style("stroke", "white")
-                .style("stroke-width", "2px");
+                // Disable 'white highlighting' during hover.
+                //.style("stroke", "white")
+                .style("stroke", config.stroke)
+                //.style("stroke-width", "2px");
+                .style("stroke-width", config.strokeWidth);
               config.mouseover(d, d3.event);
               scope.$apply();
             })
